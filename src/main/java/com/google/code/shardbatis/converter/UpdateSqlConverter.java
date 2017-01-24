@@ -27,8 +27,8 @@ public class UpdateSqlConverter extends AbstractSqlConverter {
 					"The argument statement must is instance of Update.");
 		}
 		Update update = (Update) statement;
-		String name = update.getTable().getName();
-		update.getTable()
+		String name = update.getTables().get(0).getName();
+		update.getTables().get(0)
 				.setName(this.convertTableName(name, params, mapperId));
 		return update;
 	}

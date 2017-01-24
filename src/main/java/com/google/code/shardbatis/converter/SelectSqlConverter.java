@@ -5,59 +5,15 @@ package com.google.code.shardbatis.converter;
 
 import java.util.Iterator;
 
-import net.sf.jsqlparser.expression.AllComparisonExpression;
-import net.sf.jsqlparser.expression.AnyComparisonExpression;
-import net.sf.jsqlparser.expression.BinaryExpression;
-import net.sf.jsqlparser.expression.CaseExpression;
-import net.sf.jsqlparser.expression.DateValue;
-import net.sf.jsqlparser.expression.DoubleValue;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.ExpressionVisitor;
-import net.sf.jsqlparser.expression.Function;
-import net.sf.jsqlparser.expression.InverseExpression;
-import net.sf.jsqlparser.expression.JdbcParameter;
-import net.sf.jsqlparser.expression.LongValue;
-import net.sf.jsqlparser.expression.NullValue;
-import net.sf.jsqlparser.expression.Parenthesis;
-import net.sf.jsqlparser.expression.StringValue;
-import net.sf.jsqlparser.expression.TimeValue;
-import net.sf.jsqlparser.expression.TimestampValue;
-import net.sf.jsqlparser.expression.WhenClause;
-import net.sf.jsqlparser.expression.operators.arithmetic.Addition;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseAnd;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseOr;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseXor;
-import net.sf.jsqlparser.expression.operators.arithmetic.Concat;
-import net.sf.jsqlparser.expression.operators.arithmetic.Division;
-import net.sf.jsqlparser.expression.operators.arithmetic.Multiplication;
-import net.sf.jsqlparser.expression.operators.arithmetic.Subtraction;
+import net.sf.jsqlparser.expression.*;
+import net.sf.jsqlparser.expression.operators.arithmetic.*;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
-import net.sf.jsqlparser.expression.operators.relational.Between;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
-import net.sf.jsqlparser.expression.operators.relational.ExistsExpression;
-import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.GreaterThan;
-import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
-import net.sf.jsqlparser.expression.operators.relational.InExpression;
-import net.sf.jsqlparser.expression.operators.relational.IsNullExpression;
-import net.sf.jsqlparser.expression.operators.relational.ItemsListVisitor;
-import net.sf.jsqlparser.expression.operators.relational.LikeExpression;
-import net.sf.jsqlparser.expression.operators.relational.Matches;
-import net.sf.jsqlparser.expression.operators.relational.MinorThan;
-import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
-import net.sf.jsqlparser.expression.operators.relational.NotEqualsTo;
+import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
-import net.sf.jsqlparser.statement.select.FromItemVisitor;
-import net.sf.jsqlparser.statement.select.Join;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.statement.select.SelectVisitor;
-import net.sf.jsqlparser.statement.select.SubJoin;
-import net.sf.jsqlparser.statement.select.SubSelect;
-import net.sf.jsqlparser.statement.select.Union;
+import net.sf.jsqlparser.statement.select.*;
 
 /**
  * @author sean.he
@@ -111,13 +67,13 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 		}
 
 		@SuppressWarnings("unchecked")
-		public void visit(Union union) {
-			for (Iterator iter = union.getPlainSelects().iterator(); iter
-					.hasNext();) {
-				PlainSelect plainSelect = (PlainSelect) iter.next();
-				visit(plainSelect);
-			}
-		}
+//		public void visit(Union union) {
+//			for (Iterator iter = union.getPlainSelects().iterator(); iter
+//					.hasNext();) {
+//				PlainSelect plainSelect = (PlainSelect) iter.next();
+//				visit(plainSelect);
+//			}
+//		}
 
 		public void visit(Table tableName) {
 			String table = tableName.getName();
@@ -171,12 +127,12 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 
 		public void visit(InExpression inExpression) {
 			inExpression.getLeftExpression().accept(this);
-			inExpression.getItemsList().accept(this);
+			inExpression.getRightItemsList().accept(this);
 		}
 
-		public void visit(InverseExpression inverseExpression) {
-			inverseExpression.getExpression().accept(this);
-		}
+//		public void visit(InverseExpression inverseExpression) {
+//			inverseExpression.getExpression().accept(this);
+//		}
 
 		public void visit(IsNullExpression isNullExpression) {
 		}
@@ -275,11 +231,11 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 		}
 
 		public void visit(AllComparisonExpression allComparisonExpression) {
-			allComparisonExpression.GetSubSelect().getSelectBody().accept(this);
+			allComparisonExpression.getSubSelect().getSelectBody().accept(this);
 		}
 
 		public void visit(AnyComparisonExpression anyComparisonExpression) {
-			anyComparisonExpression.GetSubSelect().getSelectBody().accept(this);
+			anyComparisonExpression.getSubSelect().getSelectBody().accept(this);
 		}
 
 		public void visit(SubJoin subjoin) {
@@ -311,6 +267,55 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 		}
 
 		public void visit(StringValue stringValue) {
+		}
+
+		// add from here for sql-parse 0.9.1
+		public void visit(SignedExpression signedExpression) {
+		}
+
+		public void visit(JdbcNamedParameter jdbcNamedParameter) {
+		}
+
+		public void visit(CastExpression cast) {
+		}
+
+		public void visit(Modulo modulo) {
+		}
+
+		public void visit(AnalyticExpression aexpr) {
+		}
+
+		public void visit(ExtractExpression eexpr) {
+		}
+
+		public void visit(IntervalExpression iexpr) {
+		}
+
+		public void visit(OracleHierarchicalExpression oexpr) {
+		}
+
+		public void visit(RegExpMatchOperator rexpr) {
+		}
+
+		public void visit(JsonExpression jsonExpr) {
+		}
+
+		public void visit(RegExpMySQLOperator regExpMySQLOperator) {
+		}
+
+		public void visit(LateralSubSelect lateralSubSelect) {
+		}
+
+		public void visit(ValuesList valuesList) {
+		}
+
+		public void visit(MultiExpressionList multiExprList) {
+		}
+
+		public void visit(SetOperationList setOpList) {
+		}
+
+		public void visit(WithItem withItem) {
 		}
 	}
 
